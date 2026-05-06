@@ -97,7 +97,7 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
 # AI Configuration
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'AIzaSyARRLl7R9hhDzNbCq-Cu_r_rv03-wb1eP0')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 GEMINI_MODEL = 'gemini-2.0-flash'  # Updated to the correct 2026 free tier model
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
 
