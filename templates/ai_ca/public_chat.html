@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI CA Chat — KaroTax</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .gradient-bg { background: linear-gradient(135deg, #1e3a5f 0%, #0f766e 100%); }
+  .chat-bubble-user { background: linear-gradient(135deg, #1e3a5f, #0f766e); }
+  .markdown-content strong { font-weight: 700; }
+  .markdown-content p { margin: 6px 0; line-height: 1.6; }
+</style>
+</head>
+<body class="bg-gray-50 flex flex-col h-screen">
+
+<!-- Top bar -->
+<div class="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between shadow-sm">
+  <div class="flex items-center gap-3">
+    <a href="/" class="gradient-bg text-white px-3 py-1.5 rounded-lg font-black text-lg">KaroTax</a>
+    <div>
+      <p class="font-semibold text-gray-800 text-sm">AI CA — Free Chat</p>
+      <p class="text-xs text-green-500">● Online — Tax, GST, Investment expert</p>
+    </div>
+  </div>
+  <a href="/accounts/register/" class="text-sm gradient-bg text-white font-semibold px-4 py-2 rounded-xl hover:opacity-90">
+    Free Account Banao →
+  </a>
+</div>
+
+<!-- Messages -->
+<div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+  <div class="text-center py-6" id="welcome-block">
+    <div class="text-4xl mb-2">🤖</div>
+    <p class="font-bold text-gray-700">Namaste! Main hoon aapka AI CA</p>
+    <p class="text-sm text-gray-500 mt-1">Tax, GST, investment — kuch bhi poocho. No login needed.</p>
+    <div class="mt-5 grid grid-cols-2 gap-2 max-w-lg mx-auto">
+      {% for label, q in quick_questions %}
+      <button onclick="sendQuick('{{ q }}')" class="text-left text-xs bg-white border border-gray-200 hover:border-teal-400 rounded-xl p-3 text-gray-700 hover:bg-teal-50 transition-all">{{ label }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="typing-indicator" class="hidden flex justify-start">
+    <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0">AI</div>
+    <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+      <div class="flex gap-1.5 items-center h-4">
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0ms"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:150ms"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:300ms"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Signup nudge -->
+<div class="bg-blue-50 border-t border-blue-100 px-4 py-2 text-center text-xs text-blue-700">
+  💡 Free account banao → ITR file karo, financial plan banao, history save karo — sab free!
+  <a href="/accounts/register/" class="font-bold underline ml-1">Sign Up Free</a>
+</div>
+
+<!-- Input -->
+<div class="bg-white border-t border-gray-100 p-4">
+  <div class="flex gap-3 items-end max-w-4xl mx-auto">
+    <textarea id="msg-input" rows="1" placeholder="Tax ka koi sawaal poocho... (Hindi ya English)" class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none" style="max-height:128px;min-height:48px"></textarea>
+    <button onclick="sendMessage()" class="gradient-bg text-white px-5 py-3 rounded-xl font-semibold text-sm hover:opacity-90 flex-shrink-0">Send</button>
+  </div>
+</div>
+
+<script>
+const csrfToken = '{{ csrf_token }}';
+const msgContainer = document.getElementById('messages');
+const input = document.getElementById('msg-input');
+
+function scrollToBottom() { msgContainer.scrollTop = msgContainer.scrollHeight; }
+
+function sendQuick(q) { input.value = q; sendMessage(); }
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+input.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+});
+
+async function sendMessage() {
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Hide welcome block after first message
+  const wb = document.getElementById('welcome-block');
+  if (wb) wb.remove();
+
+  // Add user bubble
+  msgContainer.insertAdjacentHTML('beforeend', `
+    <div class="flex justify-end">
+      <div class="max-w-[75%] chat-bubble-user text-white rounded-2xl rounded-tr-sm px-4 py-3 text-sm">${escHtml(msg)}</div>
+    </div>`);
+
+  document.getElementById('typing-indicator').classList.remove('hidden');
+  scrollToBottom();
+
+  try {
+    const res = await fetch('/ai-ca/public/send/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+      body: JSON.stringify({message: msg})
+    });
+    const data = await res.json();
+    document.getElementById('typing-indicator').classList.add('hidden');
+    const formatted = data.reply
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    msgContainer.insertAdjacentHTML('beforeend', `
+      <div class="flex justify-start">
+        <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0 mt-1">AI</div>
+        <div class="max-w-[75%] bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tl-sm shadow-sm px-4 py-3 text-sm markdown-content">${formatted}</div>
+      </div>`);
+    scrollToBottom();
+  } catch(e) {
+    document.getElementById('typing-indicator').classList.add('hidden');
+    msgContainer.insertAdjacentHTML('beforeend', `<div class="text-center text-xs text-red-500 py-2">Error. Please try again.</div>`);
+    scrollToBottom();
+  }
+}
+
+function escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

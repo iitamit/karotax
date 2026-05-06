@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Setup Profile — KaroTax{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12">
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-black text-gray-800">Apna Profile Setup Karo 👋</h1>
+    <p class="text-gray-500 mt-1">Yeh information se AI aapke liye personalized advice dega</p>
+  </div>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <form method="post">{% csrf_token %}
+      <div class="mb-6">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Aap ka income type kya hai?</label>
+        <div class="grid grid-cols-2 gap-3">
+          {% for value, label in form.fields.income_type.choices %}
+          <label class="flex items-center gap-3 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+            <input type="radio" name="income_type" value="{{ value }}" class="accent-teal-600" {% if form.instance.income_type == value %}checked{% endif %}>
+            <span class="text-sm font-medium text-gray-700">{{ label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">PAN Number</label>
+        <input name="pan_number" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Aadhaar Last 4 Digits</label>
+        <input name="aadhaar_last4" placeholder="5678" maxlength="4" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">City</label>
+        <input name="city" placeholder="Mumbai" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">State</label>
+        <input name="state" placeholder="Maharashtra" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+      <div class="mb-6"><label class="block text-sm font-semibold text-gray-700 mb-1">Date of Birth</label>
+      <input type="date" name="date_of_birth" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Save & Continue →</button>
+      <a href="{% url 'dashboard:home' %}" class="block text-center text-sm text-gray-400 mt-3 hover:text-gray-600">Skip for now</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

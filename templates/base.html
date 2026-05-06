@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}KaroTax — Aapka Smart AI CA{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .gradient-bg { background: linear-gradient(135deg, #1e3a5f 0%, #0f766e 100%); }
+  .card-hover { transition: all 0.2s ease; }
+  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+  .ai-typing::after { content: '▊'; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .progress-step.active { background: #0f766e; color: white; }
+  .progress-step.done { background: #6ee7b7; color: #065f46; }
+  .markdown-content h2 { font-size:1.1rem; font-weight:700; margin:12px 0 4px; color:#1e3a5f; }
+  .markdown-content ul { list-style:disc; padding-left:20px; margin:6px 0; }
+  .markdown-content strong { font-weight:700; }
+  .markdown-content p { margin:6px 0; line-height:1.6; }
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+{% if user.is_authenticated %}
+<nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="{% url 'dashboard:home' %}" class="flex items-center gap-2">
+        <div class="gradient-bg text-white px-3 py-1.5 rounded-lg font-black text-lg tracking-tight">KaroTax</div>
+        <span class="text-xs text-gray-500 hidden sm:block">Aapka Smart AI CA</span>
+      </a>
+      <div class="flex items-center gap-1 sm:gap-3">
+        <a href="{% url 'itr:home' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-teal-50 hover:text-teal-700 flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span class="hidden sm:inline">File ITR</span>
+        </a>
+        <a href="{% url 'ai_ca:home' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-teal-50 hover:text-teal-700 flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          <span class="hidden sm:inline">AI CA</span>
+        </a>
+        <a href="{% url 'financial:home' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-teal-50 hover:text-teal-700 flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <span class="hidden sm:inline">Plan</span>
+        </a>
+        <div class="relative group">
+          <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100">
+            <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white text-sm font-bold">
+              {{ user.first_name|first|upper }}
+            </div>
+          </button>
+          <div class="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <div class="p-3 border-b border-gray-100">
+              <p class="font-semibold text-sm text-gray-800">{{ user.get_display_name }}</p>
+              <p class="text-xs text-gray-500">{{ user.email }}</p>
+            </div>
+            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">My Profile</a>
+            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+{% endif %}
+
+{% if messages %}
+<div class="max-w-7xl mx-auto px-4 pt-4">
+  {% for message in messages %}
+  <div class="mb-2 px-4 py-3 rounded-lg text-sm font-medium
+    {% if message.tags == 'success' %}bg-green-50 text-green-800 border border-green-200
+    {% elif message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+    {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>{% block content %}{% endblock %}</main>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

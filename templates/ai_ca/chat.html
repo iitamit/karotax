@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}AI CA Chat — KaroTax{% endblock %}
+{% block extra_head %}
+<style>
+.chat-bubble-user { background: linear-gradient(135deg, #1e3a5f, #0f766e); }
+.sidebar { width: 260px; min-width: 260px; }
+@media (max-width: 768px) { .sidebar { display: none; } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="flex h-[calc(100vh-64px)]">
+  <!-- Sidebar -->
+  <div class="sidebar bg-white border-r border-gray-100 flex flex-col">
+    <div class="p-4 border-b border-gray-100">
+      <a href="{% url 'ai_ca:new_session' %}" class="w-full gradient-bg text-white font-semibold py-2.5 px-4 rounded-xl text-sm text-center block hover:opacity-90">
+        + Naya Sawaal
+      </a>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-1">
+      {% for s in sessions %}
+      <a href="{% url 'ai_ca:chat' s.id %}" class="block px-3 py-2.5 rounded-lg text-sm {% if s.id == session.id %}bg-teal-50 text-teal-700 font-medium{% else %}text-gray-600 hover:bg-gray-50{% endif %} truncate">
+        {{ s.title|default:"New conversation"|truncatechars:35 }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Chat area -->
+  <div class="flex-1 flex flex-col bg-gray-50">
+    <div class="bg-white border-b border-gray-100 px-6 py-3 flex items-center gap-3">
+      <div class="w-9 h-9 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-sm">AI</div>
+      <div><p class="font-semibold text-gray-800 text-sm">KaroTax AI CA</p>
+      <p class="text-xs text-green-500">● Online — Tax, GST, Investment expert</p></div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+      {% if not messages %}
+      <div class="text-center py-8">
+        <div class="text-4xl mb-3">🤖</div>
+        <p class="font-semibold text-gray-700">Aapka AI CA ready hai!</p>
+        <p class="text-sm text-gray-500 mt-1">Tax, GST, investment — kuch bhi poocho Hindi ya English mein</p>
+        <div class="mt-6 grid grid-cols-2 gap-2 max-w-lg mx-auto">
+          {% for label, q in quick_questions %}
+          <button onclick="sendQuick('{{ q }}')" class="text-left text-xs bg-white border border-gray-200 hover:border-teal-400 rounded-xl p-3 text-gray-700 hover:bg-teal-50 transition-all">{{ label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% for msg in messages %}
+      <div class="flex {% if msg.role == 'user' %}justify-end{% else %}justify-start{% endif %}">
+        {% if msg.role == 'assistant' %}
+        <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0 mt-1">AI</div>
+        {% endif %}
+        <div class="max-w-[75%] {% if msg.role == 'user' %}chat-bubble-user text-white rounded-2xl rounded-tr-sm{% else %}bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tl-sm shadow-sm{% endif %} px-4 py-3 text-sm">
+          {% if msg.role == 'assistant' %}<div class="markdown-content">{{ msg.content|linebreaks }}</div>
+          {% else %}{{ msg.content }}{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <div id="typing-indicator" class="hidden flex justify-start">
+        <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0">AI</div>
+        <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+          <div class="flex gap-1.5 items-center h-4">
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0ms"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:150ms"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:300ms"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="bg-white border-t border-gray-100 p-4">
+      <div class="flex gap-3 items-end">
+        <textarea id="msg-input" rows="1" placeholder="Tax ka koi sawaal poocho... (Hindi ya English)" class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none max-h-32" style="min-height:48px"></textarea>
+        <button id="send-btn" onclick="sendMessage()" class="gradient-bg text-white px-5 py-3 rounded-xl font-semibold text-sm hover:opacity-90 flex-shrink-0">Send</button>
+      </div>
+      <p class="text-xs text-gray-400 mt-2 text-center">AI CA general advice deta hai. Complex cases mein real CA se milein.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const sessionId = {{ session.id }};
+const csrfToken = '{{ csrf_token }}';
+const msgContainer = document.getElementById('messages');
+const input = document.getElementById('msg-input');
+
+function scrollToBottom() { msgContainer.scrollTop = msgContainer.scrollHeight; }
+scrollToBottom();
+
+function sendQuick(q) { input.value = q; sendMessage(); }
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+async function sendMessage() {
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Add user bubble
+  msgContainer.insertAdjacentHTML('beforeend', `
+    <div class="flex justify-end">
+      <div class="max-w-[75%] chat-bubble-user text-white rounded-2xl rounded-tr-sm px-4 py-3 text-sm">${escHtml(msg)}</div>
+    </div>`);
+
+  // Show typing
+  document.getElementById('typing-indicator').classList.remove('hidden');
+  scrollToBottom();
+
+  try {
+    const res = await fetch(`/ai-ca/chat/${sessionId}/send/`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+      body: JSON.stringify({message: msg})
+    });
+    const data = await res.json();
+    document.getElementById('typing-indicator').classList.add('hidden');
+
+    // Format markdown-ish response
+    const formatted = data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    msgContainer.insertAdjacentHTML('beforeend', `
+      <div class="flex justify-start">
+        <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white text-xs font-bold mr-2 flex-shrink-0 mt-1">AI</div>
+        <div class="max-w-[75%] bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tl-sm shadow-sm px-4 py-3 text-sm">
+          <div class="markdown-content">${formatted}</div>
+        </div>
+      </div>`);
+    scrollToBottom();
+  } catch(e) {
+    document.getElementById('typing-indicator').classList.add('hidden');
+    msgContainer.insertAdjacentHTML('beforeend', `<div class="text-center text-xs text-red-500">Error sending message. Please try again.</div>`);
+  }
+}
+
+function escHtml(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Auto-resize textarea
+input.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+});
+</script>
+{% endblock %}

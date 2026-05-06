@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Login — KaroTax{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4">
+  <div class="max-w-md w-full">
+    <div class="text-center mb-8">
+      <div class="gradient-bg text-white px-4 py-2 rounded-xl font-black text-2xl inline-block mb-3">KaroTax</div>
+      <h1 class="text-2xl font-bold text-gray-800">Wapas Aaye!</h1>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <form method="post">{% csrf_token %}
+        <div class="mb-4"><label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+        <input type="email" name="username" placeholder="your@email.com" autofocus required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div class="mb-6"><label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+        <input type="password" name="password" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        {% if form.errors %}<div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg mb-4">Invalid email or password.</div>{% endif %}
+        <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Login Karo →</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-4">New user? <a href="{% url 'accounts:register' %}" class="text-teal-600 font-semibold">Free account banao</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

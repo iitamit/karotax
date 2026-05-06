@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Step 2 — Income Details{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="flex items-center gap-2 mb-6">
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full gradient-bg text-white flex items-center justify-center text-sm font-bold">2</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">3</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">4</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">5</div>
+  </div>
+  <h1 class="text-2xl font-black text-gray-800 mb-1">Income Details</h1>
+  <p class="text-gray-500 mb-6">Sirf woh fields bharo jo aap par laagu hoti hain. Baaki 0 rehne do.</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <form method="post">{% csrf_token %}
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3">💼 Salary Income</h3>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Basic Salary (Annual) ₹</label>
+        <input name="basic_salary" type="number" placeholder="600000" value="{{ income.basic_salary|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">HRA Received ₹</label>
+        <input name="hra_received" type="number" placeholder="200000" value="{{ income.hra_received|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">HRA Exemption ₹</label>
+        <input name="hra_exemption" type="number" placeholder="120000" value="{{ income.hra_exemption|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Other Allowances ₹</label>
+        <input name="other_allowances" type="number" placeholder="50000" value="{{ income.other_allowances|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3 mt-5">💻 Freelance / Business Income</h3>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Freelance Income ₹</label>
+        <input name="freelance_income" type="number" placeholder="0" value="{{ income.freelance_income|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Business Income ₹</label>
+        <input name="business_income" type="number" placeholder="0" value="{{ income.business_income|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3 mt-5">🏦 Other Income</h3>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Interest Income ₹</label>
+        <input name="interest_income" type="number" placeholder="0" value="{{ income.interest_income|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Rental Income ₹</label>
+        <input name="rental_income" type="number" placeholder="0" value="{{ income.rental_income|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Capital Gains (STCG) ₹</label>
+        <input name="capital_gains_stcg" type="number" placeholder="0" value="{{ income.capital_gains_stcg|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Capital Gains (LTCG) ₹</label>
+        <input name="capital_gains_ltcg" type="number" placeholder="0" value="{{ income.capital_gains_ltcg|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3 mt-5">🏧 TDS / Advance Tax Already Paid</h3>
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">TDS Deducted ₹</label>
+        <input name="tds_deducted" type="number" placeholder="0" value="{{ income.tds_deducted|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-medium text-gray-600 mb-1">Advance Tax Paid ₹</label>
+        <input name="advance_tax_paid" type="number" placeholder="0" value="{{ income.advance_tax_paid|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-5 text-sm text-amber-800">
+        💡 Form 16 mein sab figures milenge. TDS Form 26AS mein hota hai (income tax portal se download karo).
+      </div>
+      <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Deductions Add Karo →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

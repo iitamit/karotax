@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}File ITR — KaroTax{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <div class="text-center mb-10">
+    <div class="text-5xl mb-3">📋</div>
+    <h1 class="text-3xl font-black text-gray-800">ITR Filing — FY 2024-25</h1>
+    <p class="text-gray-500 mt-2">10 minutes mein apna ITR file karo. AI sab calculate karega.</p>
+  </div>
+
+  {% if filing %}
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <p class="font-bold text-gray-800">FY 2024-25 Filing</p>
+        <p class="text-sm text-gray-500">{{ filing.get_status_display }} • Step {{ filing.current_step }} of 5</p>
+      </div>
+      <span class="px-3 py-1.5 rounded-full text-sm font-semibold {% if filing.status == 'submitted' %}bg-green-100 text-green-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">
+        {{ filing.get_status_display }}
+      </span>
+    </div>
+    <div class="h-2 bg-gray-100 rounded-full mb-4"><div class="h-2 rounded-full gradient-bg" style="width:{{ filing.get_step_percent }}%"></div></div>
+    {% if filing.status != 'submitted' %}
+    <a href="{% url 'itr:step' filing.current_step %}" class="block w-full gradient-bg text-white font-bold py-3 rounded-xl text-center hover:opacity-90">
+      Wahan se shuru karo jahan ruke the →
+    </a>
+    {% else %}
+    <p class="text-center text-green-600 font-semibold">✅ ITR Successfully Submitted!</p>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center mb-6">
+    <a href="{% url 'itr:start' %}" class="inline-block gradient-bg text-white font-bold px-10 py-4 rounded-xl text-lg hover:opacity-90">
+      ITR Filing Shuru Karo →
+    </a>
+    <p class="text-sm text-gray-400 mt-3">Estimated time: 10 minutes</p>
+  </div>
+  {% endif %}
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-blue-50 rounded-xl p-4 text-center">
+      <div class="text-2xl mb-1">⏱️</div>
+      <p class="font-bold text-gray-800">10 Minutes</p>
+      <p class="text-xs text-gray-500">Average filing time</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 text-center">
+      <div class="text-2xl mb-1">🤖</div>
+      <p class="font-bold text-gray-800">AI-Powered</p>
+      <p class="text-xs text-gray-500">Auto regime selection</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 text-center">
+      <div class="text-2xl mb-1">💰</div>
+      <p class="font-bold text-gray-800">Free Forever</p>
+      <p class="text-xs text-gray-500">No hidden charges</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

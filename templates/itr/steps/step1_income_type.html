@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Step 1 — ITR Filing{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-8 h-8 rounded-full gradient-bg text-white flex items-center justify-center text-sm font-bold">1</div>
+      <div class="w-10 h-0.5 bg-gray-200"></div>
+      <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">2</div>
+      <div class="w-10 h-0.5 bg-gray-200"></div>
+      <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">3</div>
+      <div class="w-10 h-0.5 bg-gray-200"></div>
+      <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">4</div>
+      <div class="w-10 h-0.5 bg-gray-200"></div>
+      <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">5</div>
+    </div>
+    <h1 class="text-2xl font-black text-gray-800">Aapki income kahan se hai?</h1>
+    <p class="text-gray-500 mt-1">Sahi ITR form choose karne ke liye</p>
+  </div>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <form method="post">{% csrf_token %}
+      <div class="space-y-3 mb-6">
+        <label class="flex items-center gap-4 border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-teal-400 transition-all">
+          <input type="radio" name="itr_type" value="ITR-1" class="accent-teal-600" checked>
+          <div class="flex-1"><p class="font-semibold text-gray-800">Salaried Employee</p><p class="text-sm text-gray-500">Salary, one house property, interest income</p></div>
+          <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-bold">ITR-1</span>
+        </label>
+        <label class="flex items-center gap-4 border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-teal-400 transition-all">
+          <input type="radio" name="itr_type" value="ITR-2" class="accent-teal-600">
+          <div class="flex-1"><p class="font-semibold text-gray-800">Salary + Capital Gains / Multiple Properties</p><p class="text-sm text-gray-500">Stocks, mutual funds, multiple properties</p></div>
+          <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full font-bold">ITR-2</span>
+        </label>
+        <label class="flex items-center gap-4 border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-teal-400 transition-all">
+          <input type="radio" name="itr_type" value="ITR-3" class="accent-teal-600">
+          <div class="flex-1"><p class="font-semibold text-gray-800">Freelancer / Business (with books)</p><p class="text-sm text-gray-500">Business income with proper accounts</p></div>
+          <span class="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-bold">ITR-3</span>
+        </label>
+        <label class="flex items-center gap-4 border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-teal-400 transition-all">
+          <input type="radio" name="itr_type" value="ITR-4" class="accent-teal-600">
+          <div class="flex-1"><p class="font-semibold text-gray-800">Freelancer / Small Business (Presumptive)</p><p class="text-sm text-gray-500">Income up to ₹50L (44ADA) or ₹2Cr (44AD)</p></div>
+          <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">ITR-4</span>
+        </label>
+      </div>
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+        <p class="text-sm text-blue-700">💡 <strong>Confused?</strong> Most salaried employees use ITR-1. Freelancers with income under ₹50L use ITR-4. Our AI will verify this in the next step.</p>
+      </div>
+      <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Aage Badho →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

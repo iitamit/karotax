@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Step 3 — Deductions{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="flex items-center gap-2 mb-6">
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full gradient-bg text-white flex items-center justify-center text-sm font-bold">3</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">4</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">5</div>
+  </div>
+  <h1 class="text-2xl font-black text-gray-800 mb-1">Deductions & Tax Saving</h1>
+  <p class="text-gray-500 mb-6">Sirf old regime ke liye. AI dono regimes compare karega automatically.</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <form method="post">{% csrf_token %}
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-5 text-sm text-blue-800">
+        📌 <strong>Section 80C limit: ₹1,50,000</strong> — PPF + ELSS + EPF + LIC + Home loan principal sab mila ke.
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3">Section 80C (Max ₹1,50,000)</h3>
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">PPF ₹</label><input name="ppf" type="number" placeholder="0" value="{{ deductions.ppf|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">ELSS Mutual Funds ₹</label><input name="elss" type="number" placeholder="0" value="{{ deductions.elss|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">EPF (Employee share) ₹</label><input name="epf" type="number" placeholder="0" value="{{ deductions.epf|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">LIC Premium ₹</label><input name="lic_premium" type="number" placeholder="0" value="{{ deductions.lic_premium|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Home Loan Principal ₹</label><input name="home_loan_principal" type="number" placeholder="0" value="{{ deductions.home_loan_principal|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">NSC ₹</label><input name="nsc" type="number" placeholder="0" value="{{ deductions.nsc|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div class="col-span-2"><label class="block text-xs font-medium text-gray-600 mb-1">Tuition Fees (2 children max) ₹</label><input name="tuition_fees" type="number" placeholder="0" value="{{ deductions.tuition_fees|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3 mt-4">80D — Health Insurance</h3>
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Self & Family (Max ₹25,000) ₹</label><input name="health_insurance_self" type="number" placeholder="0" value="{{ deductions.health_insurance_self|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Parents (Max ₹50,000 senior) ₹</label><input name="health_insurance_parents" type="number" placeholder="0" value="{{ deductions.health_insurance_parents|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3 mt-4">Other Deductions</h3>
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">NPS 80CCD(1B) extra ₹50K ₹</label><input name="nps_80ccd" type="number" placeholder="0" value="{{ deductions.nps_80ccd|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Home Loan Interest 24(b) ₹</label><input name="home_loan_interest_24b" type="number" placeholder="0" value="{{ deductions.home_loan_interest_24b|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Education Loan Interest 80E ₹</label><input name="education_loan_80e" type="number" placeholder="0" value="{{ deductions.education_loan_80e|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-xs font-medium text-gray-600 mb-1">Donation 80G ₹</label><input name="donation_80g" type="number" placeholder="0" value="{{ deductions.donation_80g|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div class="col-span-2"><label class="block text-xs font-medium text-gray-600 mb-1">Savings Interest 80TTA (Max ₹10,000) ₹</label><input name="savings_interest_80tta" type="number" placeholder="0" value="{{ deductions.savings_interest_80tta|default:0 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+
+      <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Tax Summary Dekho →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

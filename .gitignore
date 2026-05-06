@@ -1,0 +1,14 @@
+# Environments
+.env
+venv/
+env/
+
+# Databases
+db.sqlite3
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Static files generated during build
+staticfiles/

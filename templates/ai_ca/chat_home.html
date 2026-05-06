@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}AI CA — KaroTax{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="text-center mb-10">
+    <div class="text-5xl mb-3">🤖</div>
+    <h1 class="text-3xl font-black text-gray-800">Aapka AI CA</h1>
+    <p class="text-gray-500 mt-2">Tax, GST, investment — kuch bhi poocho, Hindi ya English mein</p>
+    <a href="{% url 'ai_ca:new_session' %}" class="inline-block mt-6 gradient-bg text-white font-bold px-8 py-3 rounded-xl hover:opacity-90">
+      Sawaal Poocho →
+    </a>
+  </div>
+  <div class="mb-8">
+    <h2 class="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wide">Jaldi poocho:</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {% for label, q in quick_questions %}
+      <a href="{% url 'ai_ca:new_session' %}" onclick="sessionStorage.setItem('autoQ','{{ q }}')" class="bg-white border border-gray-200 hover:border-teal-400 rounded-xl p-4 text-sm text-gray-700 hover:bg-teal-50 transition-all card-hover">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% if sessions %}
+  <div>
+    <h2 class="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wide">Recent Conversations</h2>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-50">
+      {% for s in sessions %}
+      <a href="{% url 'ai_ca:chat' s.id %}" class="flex items-center gap-4 px-5 py-4 hover:bg-gray-50">
+        <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center text-base">💬</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-medium text-gray-800 text-sm truncate">{{ s.title|default:"New conversation" }}</p>
+          <p class="text-xs text-gray-400">{{ s.created_at|timesince }} pehle • {{ s.get_topic_display }}</p>
+        </div>
+        <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

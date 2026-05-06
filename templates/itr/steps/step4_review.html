@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Step 4 — Tax Summary{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="flex items-center gap-2 mb-6">
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div>
+    <div class="w-10 h-0.5 bg-emerald-400"></div>
+    <div class="w-8 h-8 rounded-full gradient-bg text-white flex items-center justify-center text-sm font-bold">4</div>
+    <div class="w-10 h-0.5 bg-gray-200"></div>
+    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">5</div>
+  </div>
+  <h1 class="text-2xl font-black text-gray-800 mb-1">AI Tax Summary</h1>
+  <p class="text-gray-500 mb-6">Dono regimes ka comparison — AI ne best option suggest kiya hai</p>
+
+  <!-- AI Recommendation Banner -->
+  <div class="bg-gradient-to-r from-teal-600 to-blue-600 text-white rounded-2xl p-5 mb-6">
+    <p class="text-sm text-teal-200 font-medium mb-1">🤖 AI CA Recommendation</p>
+    <p class="text-base font-semibold">{{ filing.ai_regime_suggestion }}</p>
+  </div>
+
+  <!-- Regime Comparison -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="bg-white rounded-2xl border-2 {% if filing.regime == 'old' %}border-teal-500{% else %}border-gray-200{% endif %} p-5 text-center">
+      <p class="font-bold text-gray-800 mb-1">Old Regime</p>
+      <p class="text-3xl font-black text-gray-900">₹{{ old_tax|floatformat:0 }}</p>
+      <p class="text-xs text-gray-500 mt-1">With all deductions</p>
+      {% if filing.regime == 'old' %}<span class="inline-block mt-2 bg-teal-100 text-teal-700 text-xs px-3 py-1 rounded-full font-semibold">✓ AI Recommended</span>{% endif %}
+    </div>
+    <div class="bg-white rounded-2xl border-2 {% if filing.regime == 'new' %}border-teal-500{% else %}border-gray-200{% endif %} p-5 text-center">
+      <p class="font-bold text-gray-800 mb-1">New Regime</p>
+      <p class="text-3xl font-black text-gray-900">₹{{ new_tax|floatformat:0 }}</p>
+      <p class="text-xs text-gray-500 mt-1">Standard ₹75,000 deduction only</p>
+      {% if filing.regime == 'new' %}<span class="inline-block mt-2 bg-teal-100 text-teal-700 text-xs px-3 py-1 rounded-full font-semibold">✓ AI Recommended</span>{% endif %}
+    </div>
+  </div>
+
+  <!-- Income Breakdown -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
+    <h3 class="font-bold text-gray-800 mb-4">Income Breakdown</h3>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between py-2 border-b border-gray-50"><span class="text-gray-600">Gross Total Income</span><span class="font-semibold">₹{{ filing.total_income|floatformat:0 }}</span></div>
+      <div class="flex justify-between py-2 border-b border-gray-50"><span class="text-gray-600">Total Deductions (Old Regime)</span><span class="font-semibold text-green-600">- ₹{{ filing.total_deductions|floatformat:0 }}</span></div>
+      <div class="flex justify-between py-2 border-b border-gray-50"><span class="text-gray-600">Taxable Income</span><span class="font-bold text-gray-900">₹{{ filing.taxable_income|floatformat:0 }}</span></div>
+      <div class="flex justify-between py-2 border-b border-gray-50"><span class="text-gray-600">Tax Liability ({{ filing.get_regime_display }})</span><span class="font-bold text-red-600">₹{{ filing.tax_liability|floatformat:0 }}</span></div>
+      {% if income %}
+      <div class="flex justify-between py-2 border-b border-gray-50"><span class="text-gray-600">TDS / Advance Tax Paid</span><span class="font-semibold text-green-600">- ₹{{ income.tds_deducted|floatformat:0 }}</span></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <form method="post">{% csrf_token %}
+    <div class="mb-5">
+      <p class="text-sm font-semibold text-gray-700 mb-2">Final Regime Choose Karo:</p>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="flex items-center gap-2 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="regime" value="old" {% if filing.regime == 'old' %}checked{% endif %} class="accent-teal-600">
+          <span class="text-sm font-medium">Old Regime</span>
+        </label>
+        <label class="flex items-center gap-2 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="regime" value="new" {% if filing.regime == 'new' %}checked{% endif %} class="accent-teal-600">
+          <span class="text-sm font-medium">New Regime</span>
+        </label>
+      </div>
+    </div>
+    <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">ITR Submit Karo →</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}KaroTax — India Ka Smart Tax & Investment Platform{% endblock %}
+{% block content %}
+<div class="min-h-screen">
+  <!-- Hero -->
+  <div class="gradient-bg text-white py-20 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-block bg-white/10 text-white text-sm px-4 py-1.5 rounded-full mb-6 font-medium">
+        🇮🇳 Made for India — Free for Everyone
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+        Aapka Smart<br><span class="text-emerald-300">AI CA</span> — Free Hai!
+      </h1>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        ITR file karo 10 minutes mein. Tax bachao. Paise invest karo sahi jagah.<br>
+        No CA fees. No confusion. Bilkul free.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'accounts:register' %}" class="bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-bold px-8 py-4 rounded-xl text-lg transition-all">
+          Abhi Shuru Karo — Free 🚀
+        </a>
+        <a href="{% url 'accounts:login' %}" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all">
+          Login Karo
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="max-w-6xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-black text-center text-gray-800 mb-12">Teen Kaam, Ek Platform</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-hover">
+        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 text-2xl">📋</div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">ITR Filing Wizard</h3>
+        <p class="text-gray-600">Step-by-step ITR filing in just 10 minutes. AI automatically compares old vs new regime and picks the best one for you.</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">ITR-1 to ITR-4</span>
+          <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">Auto 80C calc</span>
+          <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">PDF download</span>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-hover">
+        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 text-2xl">🤖</div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">AI CA Chat</h3>
+        <p class="text-gray-600">Tax questions? GST doubts? Investment advice? Just ask in Hindi or English. Get clear, simple answers instantly — 24/7.</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1 rounded-full">Hindi/English</span>
+          <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1 rounded-full">GST help</span>
+          <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1 rounded-full">Tax notices</span>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-hover">
+        <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-4 text-2xl">📈</div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Financial Planner</h3>
+        <p class="text-gray-600">Tell us your income and goals. We'll show you exactly where to invest — PPF, ELSS, NPS, SIP — structured for your life.</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-full">Goal-based</span>
+          <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-full">Govt schemes</span>
+          <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1 rounded-full">SIP calculator</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Who is it for -->
+  <div class="bg-gray-100 py-16 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-black text-gray-800 mb-8">Kiske Liye Hai?</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="text-3xl mb-2">👔</div>
+          <h3 class="font-bold text-gray-800">Salaried Employee</h3>
+          <p class="text-sm text-gray-600 mt-1">Form 16 se ITR file karo. HRA, 80C sab auto-fill.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="text-3xl mb-2">💻</div>
+          <h3 class="font-bold text-gray-800">Freelancer</h3>
+          <p class="text-sm text-gray-600 mt-1">Multiple clients ke payments, GST, advance tax — sab handle karo.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="text-3xl mb-2">🏪</div>
+          <h3 class="font-bold text-gray-800">Small Business</h3>
+          <p class="text-sm text-gray-600 mt-1">GST filing, business income ITR, investment planning — ek hi jagah.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+<div class="py-16 px-4 text-center">
+    <h2 class="text-3xl font-black text-gray-800 mb-4">Aaj hi shuru karo — Bilkul Free!</h2>
+    <p class="text-gray-600 mb-8">No credit card. No hidden charges. Hamesha free.</p>
+    
+    <!-- This new div wraps both buttons to position them nicely -->
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="{% url 'accounts:register' %}" class="gradient-bg text-white font-bold px-10 py-4 rounded-xl text-lg inline-block hover:opacity-90 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+            Free Account Banao →
+        </a>
+        <a href="/ai-ca/public/" class="bg-white border-2 border-gray-200 text-gray-800 hover:border-teal-500 font-bold px-10 py-4 rounded-xl text-lg inline-block transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+            🤖 Try AI CA Free
+        </a>
+    </div>
+</div>
+{% endblock %}

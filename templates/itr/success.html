@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}ITR Done — KaroTax{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-16 text-center">
+  <div class="text-7xl mb-6">🎉</div>
+  <h1 class="text-3xl font-black text-gray-800 mb-2">Badhai Ho!</h1>
+  <p class="text-gray-500 mb-8 text-lg">Aapka FY 2024-25 ITR {{ filing.itr_type }} successfully process ho gaya</p>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8 text-left">
+    <div class="grid grid-cols-2 gap-4 text-sm">
+      <div class="bg-gray-50 rounded-xl p-4 text-center"><p class="text-gray-500 text-xs mb-1">Total Income</p><p class="font-black text-xl">₹{{ filing.total_income|floatformat:0 }}</p></div>
+      <div class="bg-gray-50 rounded-xl p-4 text-center"><p class="text-gray-500 text-xs mb-1">Tax Liability</p><p class="font-black text-xl">₹{{ filing.tax_liability|floatformat:0 }}</p></div>
+      <div class="{% if filing.refund_or_payable >= 0 %}bg-green-50{% else %}bg-red-50{% endif %} rounded-xl p-4 text-center col-span-2">
+        <p class="text-gray-500 text-xs mb-1">{% if filing.refund_or_payable >= 0 %}Refund Expected{% else %}Tax Payable{% endif %}</p>
+        <p class="font-black text-2xl {% if filing.refund_or_payable >= 0 %}text-green-600{% else %}text-red-600{% endif %}">₹{{ filing.refund_or_payable|floatformat:0 }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col sm:flex-row gap-4 justify-center">
+    <a href="{% url 'dashboard:home' %}" class="gradient-bg text-white font-bold px-8 py-3 rounded-xl hover:opacity-90">Dashboard Dekho</a>
+    <a href="{% url 'ai_ca:new_session' %}" class="border border-gray-200 text-gray-700 font-semibold px-8 py-3 rounded-xl hover:bg-gray-50">AI CA se Poocho</a>
+  </div>
+</div>
+{% endblock %}

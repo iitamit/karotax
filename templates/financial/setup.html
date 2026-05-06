@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Setup Financial Profile — KaroTax{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <h1 class="text-2xl font-black text-gray-800 mb-2">Financial Profile Setup</h1>
+  <p class="text-gray-500 mb-8">AI aapke liye personalized plan banayega</p>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <form method="post">{% csrf_token %}
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Monthly Income ₹</label>
+        <input name="monthly_income" type="number" placeholder="50000" value="{{ profile.monthly_income|default:'' }}" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Monthly Expenses ₹</label>
+        <input name="monthly_expenses" type="number" placeholder="30000" value="{{ profile.monthly_expenses|default:'' }}" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+        <div class="col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-1">Existing Savings ₹</label>
+        <input name="existing_savings" type="number" placeholder="100000" value="{{ profile.existing_savings|default:'' }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></div>
+      </div>
+      <div class="mb-5">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Risk Tolerance</label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-3 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+            <input type="radio" name="risk_profile" value="conservative" {% if profile.risk_profile == 'conservative' %}checked{% endif %} class="accent-teal-600">
+            <div><p class="font-medium text-sm">Conservative — Safe ❤️</p><p class="text-xs text-gray-500">FDs, PPF, government schemes. Safety first.</p></div>
+          </label>
+          <label class="flex items-center gap-3 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+            <input type="radio" name="risk_profile" value="moderate" {% if profile.risk_profile == 'moderate' or not profile.risk_profile %}checked{% endif %} class="accent-teal-600">
+            <div><p class="font-medium text-sm">Moderate — Balanced 💛</p><p class="text-xs text-gray-500">Mix of debt and equity. ELSS, NPS, hybrid funds.</p></div>
+          </label>
+          <label class="flex items-center gap-3 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+            <input type="radio" name="risk_profile" value="aggressive" {% if profile.risk_profile == 'aggressive' %}checked{% endif %} class="accent-teal-600">
+            <div><p class="font-medium text-sm">Aggressive — High Growth 💚</p><p class="text-xs text-gray-500">Equity-heavy. Index funds, mid-caps, stocks.</p></div>
+          </label>
+        </div>
+      </div>
+      <div class="mb-5">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Primary Goal</label>
+        <select name="primary_goal" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+          <option value="emergency_fund" {% if profile.primary_goal == 'emergency_fund' %}selected{% endif %}>🆘 Build Emergency Fund</option>
+          <option value="home_purchase" {% if profile.primary_goal == 'home_purchase' %}selected{% endif %}>🏠 Buy a Home</option>
+          <option value="retirement" {% if profile.primary_goal == 'retirement' %}selected{% endif %}>🧓 Comfortable Retirement</option>
+          <option value="education" {% if profile.primary_goal == 'education' %}selected{% endif %}>🎓 Child Education</option>
+          <option value="wealth_creation" {% if profile.primary_goal == 'wealth_creation' %}selected{% endif %}>💰 General Wealth Creation</option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Goal Timeline (years)</label>
+        <input name="goal_timeline_years" type="number" min="1" max="40" placeholder="5" value="{{ profile.goal_timeline_years|default:5 }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+      </div>
+      <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Plan Generate Karo →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

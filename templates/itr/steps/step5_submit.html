@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Step 5 — Submit ITR{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="flex items-center gap-2 mb-8">
+    {% for i in "1234" %}<div class="w-8 h-8 rounded-full bg-emerald-400 text-white flex items-center justify-center text-sm font-bold">✓</div><div class="w-10 h-0.5 bg-emerald-400"></div>{% endfor %}
+    <div class="w-8 h-8 rounded-full gradient-bg text-white flex items-center justify-center text-sm font-bold">5</div>
+  </div>
+  <h1 class="text-2xl font-black text-gray-800 mb-1">Final Review & Submit</h1>
+  <p class="text-gray-500 mb-6">Ek baar check karo phir submit karo</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+    <div class="space-y-3 text-sm">
+      <div class="flex justify-between"><span class="text-gray-500">Taxpayer</span><span class="font-semibold">{{ filing.user.get_display_name }}</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">PAN</span><span class="font-semibold">{{ filing.user.pan_number|default:"Not provided" }}</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">Assessment Year</span><span class="font-semibold">AY 2025-26 (FY 2024-25)</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">ITR Type</span><span class="font-semibold">{{ filing.itr_type }}</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">Tax Regime</span><span class="font-semibold">{{ filing.get_regime_display }}</span></div>
+      <hr>
+      <div class="flex justify-between"><span class="text-gray-500">Total Income</span><span class="font-bold">₹{{ filing.total_income|floatformat:0 }}</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">Tax Liability</span><span class="font-bold text-red-600">₹{{ filing.tax_liability|floatformat:0 }}</span></div>
+      <div class="flex justify-between"><span class="text-gray-500">Tax Paid (TDS)</span><span class="font-bold text-green-600">₹{{ filing.tax_paid|floatformat:0 }}</span></div>
+      <div class="flex justify-between pt-2 border-t"><span class="font-bold text-gray-800">{% if filing.refund_or_payable >= 0 %}Refund Due{% else %}Tax Payable{% endif %}</span>
+        <span class="font-black text-lg {% if filing.refund_or_payable >= 0 %}text-green-600{% else %}text-red-600{% endif %}">₹{{ filing.refund_or_payable|floatformat:0 }}</span></div>
+    </div>
+  </div>
+
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-sm text-amber-800">
+    ⚠️ <strong>Important:</strong> KaroTax ab e-filing portal se directly file nahi karta (integration coming soon). Yeh data le jaake <a href="https://www.incometax.gov.in" target="_blank" class="underline font-semibold">incometax.gov.in</a> par manually file karo. Hum aapke liye sab calculate kar chuke hain!
+  </div>
+
+  <form method="post">{% csrf_token %}
+    <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90 mb-3">✅ Mark as Submitted</button>
+    <a href="{% url 'itr:step' 4 %}" class="block text-center text-sm text-gray-400 hover:text-gray-600">← Wapas jao</a>
+  </form>
+</div>
+{% endblock %}
