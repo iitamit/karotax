@@ -71,8 +71,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'karotax_db'),
-            'USER': os.getenv('DB_USER', 'karotax_user'),
+            'NAME': os.getenv('DB_NAME', 'KaroTax_db'),
+            'USER': os.getenv('DB_USER', 'KaroTax_user'),
             'PASSWORD': os.getenv('DB_PASSWORD', 'I_Win#_26'),
             'HOST': os.getenv('DB_HOST', 'localhost'),
             'PORT': os.getenv('DB_PORT', '5432'),
@@ -103,5 +103,5 @@ GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
 
 # Site Settings
 SITE_NAME = 'KaroTax'
-SITE_TAGLINE = 'Aapka Smart AI CA'
+SITE_TAGLINE = 'SMART ITR FILLING SYSTEM AND AI CHARTERED ACCOUNTANT'
 TAX_YEAR = '2024-25'

@@ -1,5 +1,5 @@
 """
-ASGI config for karotax project.
+ASGI config for KaroTax project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

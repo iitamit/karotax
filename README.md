@@ -1,4 +1,4 @@
-# KaroTax — Aapka Smart AI CA 🇮🇳
+# KaroTax — SMART ITR FILLING SYSTEM AND AI CHARTERED ACCOUNTANT 🇮🇳
 
 > Free ITR filing + AI CA chat + Financial planning for every Indian
 
@@ -44,7 +44,7 @@ Open http://localhost:8000
 
 ## Project Structure
 ```
-karotax/          — Django project settings & urls
+KaroTax/          — Django project settings & urls
 accounts/         — User auth, profile, PAN/Aadhaar
 itr/              — ITR wizard (5 steps), tax calculator
 ai_ca/            — AI CA chat (Gemini + Groq)
@@ -55,9 +55,9 @@ templates/        — All HTML templates
 
 ## Database (PostgreSQL for production)
 ```sql
-CREATE DATABASE karotax_db;
-CREATE USER karotax_user WITH PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE karotax_db TO karotax_user;
+CREATE DATABASE KaroTax_db;
+CREATE USER KaroTax_user WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE KaroTax_db TO KaroTax_user;
 ```
 Then set USE_SQLITE=False in .env.
 

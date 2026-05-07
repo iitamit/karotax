@@ -1,5 +1,5 @@
 """
-WSGI config for karotax project.
+WSGI config for KaroTax project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
