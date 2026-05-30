@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
 {% block title %}Login — SahajTax{% endblock %}
 {% block content %}
 <div class="min-h-screen flex items-center justify-center py-12 px-4">
@@ -16,6 +17,30 @@
         {% if form.errors %}<div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg mb-4">Invalid email or password.</div>{% endif %}
         <button type="submit" class="w-full gradient-bg text-white font-bold py-3 rounded-xl hover:opacity-90">Login Karo →</button>
       </form>
+
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:#8a8a8a;font-size:13px;">
+        <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+        <span>or</span>
+        <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+      </div>
+
+      <!-- Google Sign-In Button -->
+      <a href="{% provider_login_url 'google' %}"
+         style="display:inline-flex;align-items:center;justify-content:center;
+                width:100%;padding:11px 20px;background:#fff;color:#3c4043;
+                border:1px solid #dadce0;border-radius:6px;font-size:15px;
+                font-weight:500;text-decoration:none;box-sizing:border-box;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+             width="20" height="20" style="margin-right:10px;flex-shrink:0;">
+          <path fill="#EA4335" d="M24 9.5c3.1 0 5.6 1.1 7.6 2.9l5.7-5.7C33.7 3.5 29.2 1.5 24 1.5 14.9 1.5 7.2 7.3 4 15.3l6.7 5.2C12.4 14 17.7 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.5 24c0-1.6-.1-2.7-.4-3.9H24v7.4h12.8c-.6 3-2.3 5.5-4.8 7.2l7.4 5.8C43.7 36.5 46.5 30.7 46.5 24z"/>
+          <path fill="#FBBC05" d="M10.7 28.5c-.5-1.5-.8-3.2-.8-5s.3-3.4.8-5l-6.7-5.2C2.5 16.5 1.5 20.1 1.5 24s1 7.5 2.5 10.7l6.7-5.2z"/>
+          <path fill="#34A853" d="M24 46.5c5.2 0 9.6-1.7 12.8-4.6l-7.4-5.8c-1.8 1.2-4.1 1.9-5.4 1.9-6.3 0-11.6-4.5-13.3-10.5l-6.7 5.2C7.2 40.7 14.9 46.5 24 46.5z"/>
+        </svg>
+        Sign in with Google
+      </a>
+
       <p class="text-center text-sm text-gray-500 mt-4">New user? <a href="{% url 'accounts:register' %}" class="text-teal-600 font-semibold">Free account banao</a></p>
     </div>
   </div>

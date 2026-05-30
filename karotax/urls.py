@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing, name='landing'),
     path('accounts/', include('accounts.urls')),
+    path('accounts/', include('allauth.urls')),
     path('itr/', include('itr.urls')),
     path('ai-ca/', include('ai_ca.urls')),
     path('financial/', include('financial.urls')),

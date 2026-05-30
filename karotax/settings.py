@@ -5,8 +5,9 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables from the .env file
-load_dotenv(BASE_DIR / '.env')
+# Load environment variables from the .env file. Override stale shell values so
+# localhost OAuth uses the credentials currently saved in this project.
+load_dotenv(BASE_DIR / '.env', override=True)
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production-abc123xyz')
 DEBUG = True
@@ -26,15 +27,34 @@ INSTALLED_APPS = [
     'dashboard',
 ]
 
+# Added for django-allauth
+# Note: keep existing apps above and append social auth apps below
+INSTALLED_APPS += [
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
+
+# Site ID for django.contrib.sites (required by allauth)
+SITE_ID = 1
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'accounts.middleware.LocalhostCanonicalMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# Allauth middleware (appended after existing middleware)
+MIDDLEWARE += [
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'karotax.urls'
@@ -100,8 +120,50 @@ LOGOUT_REDIRECT_URL = '/'
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 GEMINI_MODEL = 'gemini-2.0-flash'  # Updated to the correct 2026 free tier model
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
 
 # Site Settings
 SITE_NAME = 'KaroTax'
 SITE_TAGLINE = 'SMART ITR FILLING SYSTEM AND AI CHARTERED ACCOUNTANT'
 TAX_YEAR = '2024-25'
+
+# Authentication backends for django-allauth
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# ── Allauth config ─────────────────────────────────────────
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
+LOGIN_REDIRECT_URL  = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL           = '/accounts/login/'
+GOOGLE_OAUTH_CALLBACK_URL = os.getenv(
+    'GOOGLE_OAUTH_CALLBACK_URL',
+    'http://localhost:8000/accounts/google/login/callback/',
+)
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID', ''),
+            'secret':    os.environ.get('GOOGLE_CLIENT_SECRET', ''),
+            'key':       '',
+        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
